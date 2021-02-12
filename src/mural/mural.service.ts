@@ -5,6 +5,9 @@ import { User } from '../mural/mural.entity';
 
 @Injectable()
 export class MuralServices {
+  findByID(id: any) {
+    throw new Error('Method not implemented.');
+  }
   //Inicia criando um repo, para as funçoes http
   constructor(
     @InjectRepository(User)

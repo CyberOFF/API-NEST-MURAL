@@ -9,7 +9,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiHeader, ApiOperation, ApiParam, ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
 // import { DeleteDateColumn } from 'typeorm';
 import { User } from '../mural/mural.entity';
 import { MuralServices } from '../mural/mural.service';
@@ -20,10 +20,12 @@ export class UsersController {
 
   @Get('') //Url alem do user, poe dentro do () GET
   @ApiTags('Mural')
+  
   @ApiResponse({
     status: 200,
     description: 'Listagem Feita Com Sucesso',
   })
+  @ApiOperation({ summary: 'List' })
   async list() {
     const users = await this.muralServices.search();
     return users;
@@ -31,28 +33,33 @@ export class UsersController {
 
   @Post('')
   @ApiTags('Mural')
-  @ApiProperty({
-    example: 1,
-    description: `"Name": "Any Name", \n "message" "Any Message"`,
-  })
+
+
+  @ApiOperation({ summary: 'Cadastro' })
+
   // @ApiBody({ example: '{"name" : "Any Name" \n "message" : "Any Message' })
   async register(@Body() { name, message }: User) {
     //Dentro do corpo, ele vai receber um objeto, e esse objeto vai pegar todos os atributos de User .
     await this.muralServices.create(name, message); //so pode chamar um await se tiver um async antes
-    return 'Criado com sucesso PCR';
+    return 'Created By ';
   }
 
-  @Put('/:id')
+  @Put('')
   @ApiTags('Mural')
-  async update(@Body() { message }: User, @Param() id: string) {
-    await this.muralServices.edit(message, id);
-    return 'Atualizado com Sucesso meu caro';
+  @ApiOperation({ summary: 'Edit' })
+
+  async update(@Body() { message }: User, @Body() {id}: any) {
+    await this.muralServices.edit(id, message);
+    
+    return 'Update By';
   }
 
   @Delete('/:id')
   @ApiTags('Mural')
+  @ApiOperation({ summary: 'Remoçao' })
+
   async remove(@Param() { id }: any): Promise<string> {
     await this.muralServices.remove(id);
-    return 'Deletado com sucesso';
+    return 'Deleted By';
   }
 }
